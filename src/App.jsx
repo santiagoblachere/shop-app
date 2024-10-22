@@ -1,13 +1,21 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-function App() {
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { CartProvider, CartContext } from './components/ContextProvider';
 
+function App() {
+  const { cart, setCart, products, loading } = useContext(CartContext);
   return (
     <>
-      <h1>hola, soy todas las cosas</h1>
-      <Link to="shop">VAMOS A HACER COMPRAS :3</Link>
+      <h1>Random nameless, loveless shop</h1>
+      <Link to="/shop">Shop</Link>
     </>
   )
 }
 
-export default App
+export default function AppWrapper() {
+  return (
+    <CartProvider>
+      <App />
+    </CartProvider>
+  );
+}

@@ -1,9 +1,4 @@
 .container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
-}
-.card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,15 +8,9 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    max-width: 50%;
 }
-.card img {
+.container img {
     max-width: 100px;
-    max-height: 100px;
-}
-.bigContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-direction: column;
+    max-height: 100px;  
 }

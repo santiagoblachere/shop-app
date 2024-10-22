@@ -1,67 +1,64 @@
-import { Link } from "react-router-dom"
-import { useEffect } from "react"
-import { useState } from "react"
-import styles from './Shopping.module.css'
-import { useParams } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import styles from './Shopping.module.css';
+import { useParams } from "react-router-dom";
+import ProductDetail from "./ProductDetail";
+import { useContext } from "react";
+import { CartContext, CartProvider } from './ContextProvider';
+
 function Shop() {
-const [products, setProducts] = useState([])
-const [productDetail, setProducDetail] = useState(null)
-const [loading, setLoading] = useState(true)
-const { id } = useParams()
-function handleCartClick(product) {
-    console.log(product)
-}
+  const { cart, setCart, products, loading, imagesLoaded } = useContext(CartContext);
+  const { id } = useParams();
+  const [cartCounter, setCartCounter] = useState(0);
 
-useEffect(() => {
-    const fetchProducts = async () => {
-            const response = await fetch('https://fakestoreapi.com/products')
-            try{
-                const data = await response.json()
-                setProducts(data)
-            }catch(error){
-                console.log(error)                  
-            }            
-    }
-    fetchProducts()
-    setLoading(false)
-}, [])
+  const handleCartClick = (product) => {
+    const productForCart = {
+      productId: product.id,
+      productTitle: product.title,
+      productPrice: product.price,
+    };
+    setCart((prevCart) => [...prevCart, productForCart]);
+    setCartCounter(cartCounter + 1);
+    console.log(cart);
+  };
 
+  return (
+    <div>
+      <div>
+        <h1>{cartCounter}</h1>
+        <Link to="cart">Cart</Link>
+      </div>
 
-    return (
-        loading ? <h1>Loading...</h1> :
-        <div>
-        <h1>hola a todos, soy el shop</h1>
-        <Link to="/">GO BACK. THIS IS SHIT</Link>
-        <div id="container"className={styles.container}>
-        {id === undefined ? 
-        products.map(product => {
-            return (
-                <div className={styles.card}key={product.id}>
+      {loading || !imagesLoaded ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div className={styles.bigContainer}>
+          <h1>hola a todos, soy el shop</h1>
+          <Link to="/">GO BACK. THIS IS SHIT</Link>
+
+          {id === undefined ? (
+            <div key="product-list" id="container" className={styles.container}>
+              {products.map(product => {
+                return (
+                  <div className={styles.card} key={product.id}>
                     <h2>{product.title}</h2>
                     <img src={product.image} alt={product.title} />
                     <h3>${product.price}</h3>
                     <button onClick={() => handleCartClick(product)}>ADD TO CART</button>
                     <Link to={`/shop/${product.id}`}>DETAILS</Link>
-                </div>
-            )
-        })      
-        : products.map(product => {
-            if(product.id !== Number(id)) return
-            return (
-                <div className={styles.card}key={product.id}>
-                    <h2>{product.title}</h2>
-                    <img src={product.image} alt={product.title} />
-                    <p>{product.description}</p>
-                    <h3>${product.price}</h3>
-                    <button onClick={() => handleCartClick(product)}>ADD TO CART</button>
-                </div>
-            )
-        })}
-        {}
+                  </div>
+                );
+              })}
+            </div>
+          ) : products.find(product => product.id.toString() === id) ? (
+            <div key={id}>
+              <ProductDetail cartCounter={cartCounter} handleCartClick={handleCartClick} cart={cart} product={products.find(product => product.id.toString() === id)} />
+            </div>
+          ) : <h1>NOT FOUND</h1>}
         </div>
-
-        </div>
-    )
+      )}
+    </div>
+  );
 }
 
-export default Shop
+export default Shop;
