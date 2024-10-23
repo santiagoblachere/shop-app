@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App.jsx'
 import Shopping from './components/Shopping.jsx'
-import { CartProvider } from './components/ContextProvider.jsx';
+import Cart from './components/Cart.jsx'
+import { CartProvider } from './components/ContextProvider.jsx'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "shop/:id",
     element: <Shopping />
+  },
+  {
+    path:"shop/cart",
+    element: <Cart />
   }
 ])
 createRoot(document.getElementById('root')).render(

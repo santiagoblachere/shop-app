@@ -8,13 +8,20 @@ const CartProvider = ({ children }) => {
     const storedCart = localStorage.getItem('cart');
     return storedCart ? JSON.parse(storedCart) : [];
   });
+  const [cartCounter, setCartCounter] = useState(() => {
+    const storedCartCounter = localStorage.getItem('cartCounter');
+    return storedCartCounter ? JSON.parse(storedCartCounter) : 0;
+  });
   const [loading, setLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [cartCounter, setCartCounter] = useState(0);
+
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
+  useEffect(() => {
+    localStorage.setItem('cartCounter', JSON.stringify(cartCounter));
+  }, [cartCounter]);
 
   useEffect(() => {
     const fetchProducts = async () => {
